@@ -8,6 +8,10 @@ spring:
       max-file-size: 1MB
       max-request-size: 1MB
 
+  # JSON 네이밍 전역 설정 (snake_type)
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
 # S3 Properties
 aws:
   s3:
