@@ -9,26 +9,18 @@ import com.example.demo.common.config.S3Properties;
 import com.example.demo.image.application.ImageClient;
 
 import lombok.RequiredArgsConstructor;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
 @RequiredArgsConstructor
 public class S3ImageClient implements ImageClient {
 
-	private final S3Client s3Client;
 	private final S3Properties properties;
+	private final S3Uploader s3Uploader;
 
 	@Override
 	public String upload(String objectKey, MultipartFile file) throws IOException {
-		PutObjectRequest request = PutObjectRequest.builder()
-			.bucket(properties.bucketName())
-			.key(objectKey)
-			.contentType(file.getContentType())
-			.build();
-		s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
-
+		String bucketName = properties.bucketName();
+		s3Uploader.upload(bucketName, objectKey, file);
 		return properties.imageUrl() + objectKey;
 	}
 }
