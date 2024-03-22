@@ -1,7 +1,5 @@
 package com.example.demo.image.infrastructure;
 
-import java.io.IOException;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +16,7 @@ public class S3ImageClient implements ImageClient {
 	private final S3Uploader s3Uploader;
 
 	@Override
-	public String upload(String objectKey, MultipartFile file) throws IOException {
+	public String upload(String objectKey, MultipartFile file) {
 		String bucketName = properties.bucketName();
 		s3Uploader.upload(bucketName, objectKey, file);
 		return properties.imageUrl() + objectKey;

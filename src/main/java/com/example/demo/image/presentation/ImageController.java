@@ -1,7 +1,5 @@
 package com.example.demo.image.presentation;
 
-import java.io.IOException;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,7 @@ public class ImageController {
 	@PostMapping("/upload")
 	public ResponseEntity<ImageUrlResponse> upload(
 		@RequestPart(name = "files", required = false) MultipartFile file
-	) throws IOException {
+	) {
 		log.info("file => {}", file);
 
 		return ResponseEntity.ok(imageService.uploadImage(file));

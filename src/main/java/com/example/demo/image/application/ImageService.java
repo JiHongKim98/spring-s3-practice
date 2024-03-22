@@ -1,6 +1,5 @@
 package com.example.demo.image.application;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ public class ImageService {
 
 	private final ImageClient imageClient;
 
-	public ImageUrlResponse uploadImage(MultipartFile file) throws IOException {
+	public ImageUrlResponse uploadImage(MultipartFile file) {
 		String objectKey = UUID.randomUUID().toString();
 		String imageUrl = imageClient.upload(objectKey, file);
 		return ImageUrlResponse.of(imageUrl);

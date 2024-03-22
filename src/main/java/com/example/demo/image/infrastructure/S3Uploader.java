@@ -16,12 +16,20 @@ public class S3Uploader {
 
 	private final S3Client s3Client;
 
-	public void upload(String bucketName, String key, MultipartFile file) throws IOException {
+	public void upload(String bucketName, String key, MultipartFile file) {
 		PutObjectRequest request = PutObjectRequest.builder()
 			.bucket(bucketName)
 			.key(key)
 			.contentType(file.getContentType())
 			.build();
-		s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
+		s3Client.putObject(request, RequestBody.fromBytes(getBytes(file)));
+	}
+
+	private byte[] getBytes(MultipartFile file) {
+		try {
+			return file.getBytes();
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);  // TODO: 예외 처리 보강
+		}
 	}
 }
