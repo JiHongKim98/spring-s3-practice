@@ -1,31 +1,32 @@
 package com.example.demo.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
+@RequiredArgsConstructor
 public class S3Config {
 
-	@Value("${aws.s3.access-key}")
-	private String accessKey;
-
-	@Value("${aws.s3.secret-key}")
-	private String secretKey;
+	private final S3Properties properties;
 
 	@Bean
 	public S3Client s3Client() {
-		AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
-		StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(credentials);
-
 		return S3Client.builder()
-			.credentialsProvider(credentialsProvider)
-			.region(Region.AP_NORTHEAST_2)
+			.credentialsProvider(awsCredentialsProvider())
+			.region(Region.of(properties.region()))
 			.build();
+	}
+
+	private AwsCredentialsProvider awsCredentialsProvider() {
+		AwsBasicCredentials credentials = AwsBasicCredentials
+			.create(properties.accessKey(), properties.secretKey());
+		return StaticCredentialsProvider.create(credentials);
 	}
 }
